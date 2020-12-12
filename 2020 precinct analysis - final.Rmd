@@ -7,6 +7,7 @@ output:
     theme: simplex
     toc: true
     toc_float: true
+    df_print: paged
 ---
 
 This document analayzes election data in Arizona's Maricopa County at the precinct-level. The findings were used to create an interactive map and to support a story for the Arizona Capitol Times. 
