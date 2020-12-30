@@ -10,9 +10,11 @@ output:
     df_print: paged
 ---
 
-This document analayzes election data in Arizona's Maricopa County at the precinct-level. The findings were used to create an interactive map and to support a story for the Arizona Capitol Times. 
+This document analayzes election data in Arizona's Maricopa County at the precinct-level. The findings were used to create an interactive map and to support a [story](https://azcapitoltimes.com/news/2020/12/17/ld17-thin-victory-margins-and-a-tie/) for the Arizona Capitol Times about shifting politics in the suburbs of Phoenix.
 
 The focus on this project was the presidential race. Although I include some glimpses of the results by legislative district and a look at state senate results, the major work of this code is to produce precinct-level election results that show whether Joe Biden or President Donald Trump won the precinct and by how much.
+
+![](article screenshot.png)
 
 ```{r, message = FALSE, include = FALSE }
 
@@ -26,7 +28,7 @@ library(kableExtra)
 
 Download the 2020 election results from the [Maricopa County Recorder's Office](https://recorder.maricopa.gov/electionresults/) or use [this link](https://recorder.maricopa.gov/media/ArizonaExportByPrecinct_110320.txt) to access the results directly. 
 
-These results were published as of Nov. 13 at 4 p.m. after all votes were counted. The results were [certified](https://www.azcentral.com/story/news/politics/elections/2020/11/20/maricopa-county-supervisors-meet-consider-certifying-election-results/6362991002/) on Nov. 20, 2020 by the Maricopa County Board of Supervisors.
+These results were published on Nov. 13 at 4 p.m. after all votes were counted. The results were [certified](https://www.azcentral.com/story/news/politics/elections/2020/11/20/maricopa-county-supervisors-meet-consider-certifying-election-results/6362991002/) on Nov. 20, 2020 by the Maricopa County Board of Supervisors.
 
 ```{r, message = FALSE}
 
@@ -78,6 +80,7 @@ presidential_contest_2020 %>%
   kable( )
 
 ```
+
 These sums match the summary reports published by the county, so we should be good to go!
 ![](Election_summary_screenshot_2020.png) 
 
@@ -153,7 +156,7 @@ The figures above match the published totals by the Maricopa County Recorder's O
 
 FOR THE STORY:
 
-I want to know the 2020 margin in a handful of precincts east of Phoenix. These are all in state Legislative District 17; all chose Joe Biden.
+I want to know the winning margin in a handful of precincts east of Phoenix. These are all in state Legislative District 17; all chose Joe Biden.
 ```{r}
 
 president_by_precinct_2020 %>% 
@@ -271,7 +274,7 @@ senate_by_precinct_2020 %>%
 
 I also want to summarise the presidential results for all of LD 17.
 
-The precinct data from the Maricopa County Recorder's Office doesn't include the legislative district, but the *shapefile* of voting precincts does. I downloaded this from their [mapping services page](https://recorder.maricopa.gov/electionmaps/), loaded it to arcGIS, then exported the attribute table as a CSV. 
+The precinct data from the Maricopa County Recorder's Office doesn't include the legislative district, but the *shapefile* of voting precincts does. I downloaded this from the [mapping services page](https://recorder.maricopa.gov/electionmaps/) of the Recorder's Office, loaded it to arcGIS, then exported the attribute table as a CSV. 
 
 The file is a quick way to figure out which precincts fall into LD17.
 ```{r, message = FALSE }
@@ -310,9 +313,7 @@ LD17_summary <- precinct_results_with_LD %>%
 
 ```
 
-Now analyze candidate performance in the district as a whole.
-
-LD17 went for Trump in 2016, but this year voters chose Joe Biden.
+Now analyze candidate performance in the district as a whole. As we'll see, although LD17 went for Trump in 2016, voters this year chose Joe Biden by a margin of 3%.
 ```{r, message = FALSE}
 
 precinct_results_with_LD %>% 
@@ -349,7 +350,7 @@ precinct_results_with_LD %>%
 
 ## 2016 General Election
 
-For the story, I also want to compare the presidential race in a few precincts between 2016 and 2020. This section copies the 2020 analysis but using the 2016 precinct results. Note that while the logic and analysis remain the same, the file format is slightly different so requires a few tweaks.
+For this story, I also want to compare the presidential race in a few precincts between 2016 and 2020. This section copies the 2020 analysis but using the 2016 precinct results. Note that while the logic and analysis remain the same, the file format is slightly different and so requires a few tweaks.
 
 First, load the data. The 2016 results can be downloaded from [this link](https://recorder.maricopa.gov/electionarchives/2016/11-08-2016%20Final%20Precinct%20Report%20NOV%202016.txt), available in the Maricopa County Recorder's election archives.
 
@@ -483,12 +484,15 @@ presidential_contest_2016 %>%
 The figures above match the summaries published by the Maricopa County Recorder's Office in 2016.
 ![](Election_summary_screenshot_2016.png)
 
-FOR THE STORY: Pull out 2016 precinct results for a few key places in Chandler and LD17.
+FOR THE STORY:
 
-As we can see, Dobson Park, Lantana Canyon and Laredo precincts all went for Trump in 2017. They are in proximity of Germann precinct, which has leaned Democratic in recent years.
+Pull out 2016 precinct results for a few key places in Chandler and LD17. Specifically, we're looking for the same precincts named in the 2020 section. I want to confirm that they did lean Republican four years ago.
+
 ```{r}
 
 president_by_precinct_2016 %>% 
   filter( precinct_name %in% c( "DOBSON PARK", "LAREDO", "LANTANA CANYON", "MUSKET", "GERMANN"  ) )
 
 ```
+
+As we can see, Dobson Park, Lantana Canyon and Laredo precincts all went for Trump in 2016. But they are all just steps away from liberal-leaning Germann precinct, which stayed blue in 2020.
